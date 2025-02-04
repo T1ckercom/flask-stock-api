@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import requests
 import os
 
 app = Flask(__name__)
+CORS(app)  # Allow all origins (React can now access this API)
 
 # Load your FMP API Key
 FMP_API_KEY = os.getenv("FMP_API_KEY", "UwbsK5XWR0U2yaV0732fg2MSGz8b2HBR")
@@ -15,10 +17,10 @@ def get_stock_data():
 
     url = f"https://financialmodelingprep.com/api/v3/quote/{ticker}?apikey={FMP_API_KEY}"
     response = requests.get(url)
-    
+
     if response.status_code != 200:
         return jsonify({"error": "Failed to fetch data from FMP."}), 500
-    
+
     data = response.json()
     return jsonify(data)
 
